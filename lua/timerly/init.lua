@@ -23,7 +23,9 @@ M.open = function()
   state.w = 24 + 2 + (2 * 4) + (2 * state.xpad)
   state.w_with_pad = state.w - (2 * state.xpad)
 
-  utils.openwins()
+  utils.open_watch(true)
+  state.is_center = true
+  -- utils.open_watch()
 
   vim.fn.prompt_setcallback(state.input_buf, function(input)
     local n = tonumber(input)
@@ -58,17 +60,48 @@ M.open = function()
   require "timerly.actions"
 end
 
+M.toggle_watch = function()
+  if not state.volt_set then
+    M.open()
+  elseif state.visible_watch then
+    api.nvim_win_close(state.win, true)
+  else
+    utils.open_watch()
+  end
+
+  state.visible_watch = not state.visible_watch
+end
+
+M.toggle_input = function()
+  if not state.volt_set then
+    M.open()
+    utils.open_input()
+    state.visible_watch = true
+    state.visible_input = true
+  elseif state.visible_input then
+    api.nvim_win_close(state.input_win, true)
+    state.visible_input = false
+  elseif state.visible_watch then
+    utils.open_input()
+    state.visible_input = true
+  end
+end
+
 M.toggle = function()
   if not state.volt_set then
     M.open()
-  elseif state.visible then
-    api.nvim_win_close(state.win, true)
-    api.nvim_win_close(state.input_win, true)
-  else
-    utils.openwins()
-  end
+    state.visible_watch = true
+  elseif state.volt_set and not state.visible_watch then
+    state.win = vim.api.nvim_open_win(state.buf, false, state.win_conf)
+    state.visible_watch = true
+    api.nvim_win_set_hl_ns(state.win, state.ns)
+    api.nvim_set_hl(state.ns, "Normal", { link = "ExdarkBg" })
+    api.nvim_set_hl(state.ns, "FLoatBorder", { link = "Exdarkborder" })
 
-  state.visible = not state.visible
+  else
+    api.nvim_win_hide(state.win)
+    state.visible_watch = false
+  end
 end
 
 return M

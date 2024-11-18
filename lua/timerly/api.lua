@@ -4,10 +4,6 @@ local state = require "timerly.state"
 local redraw = require("volt").redraw
 
 M.start = function()
-  if state.config.on_start then
-    state.config.on_start()
-  end
-
   local mins = state.status == "pause" and (state.total_secs / 60) or state.minutes
   utils.start(mins)
   state.status = "start"
@@ -29,12 +25,12 @@ M.pause = function()
 end
 
 M.increment = function()
-  state.minutes = state.minutes + 1
+  state.minutes = state.minutes + 5
   M.reset()
 end
 
 M.decrement = function()
-  state.minutes = state.minutes - 1
+  state.minutes = state.minutes - 5
   M.reset()
 end
 
@@ -42,7 +38,7 @@ M.togglemode = function()
   local focusmode = state.mode == "focus"
   state.mode = (focusmode and "break") or "focus"
   state.minutes = state.config.minutes[focusmode and 2 or 1]
-  -- redraw(state.buf, "modes")
+  redraw(state.buf, "modes")
   M.reset()
 end
 

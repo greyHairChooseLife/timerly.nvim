@@ -5,12 +5,6 @@ local redraw = require("volt").redraw
 local api = vim.api
 
 M.secs_to_ascii = function(n)
-  if state.minutes > 59 then
-    state.minutes = 25
-    n = 25 * 60
-    vim.notify "Timerly: you can't set a time longer than 25 minutes"
-  end
-
   local mins = n / 60 -- Make sure mins is an integer
   local secs = n % 60
 
@@ -72,23 +66,31 @@ M.start = function(minutes)
   )
 end
 
-M.openwins = function()
+M.open_watch = function(center)
   local centered_col = math.floor((vim.o.columns / 2) - (state.w / 2))
   local centered_row = math.floor((vim.o.lines / 2) - (state.h / 2))
   local right_col = math.floor((vim.o.columns) - (state.w / 2))
 
   state.buf = state.buf or api.nvim_create_buf(false, true)
 
-  state.win = api.nvim_open_win(state.buf, true, {
+  state.win_conf = {
     relative = "editor",
-    row = 0, -- centered_row,
-    col = right_col,
+    row = center and centered_row or 0,
+    col = center and centered_col or right_col,
     width = state.w,
     height = state.h,
     style = "minimal",
     border = "single",
-  })
+  }
 
+  state.win = api.nvim_open_win(state.buf, true, state.win_conf)
+
+  api.nvim_win_set_hl_ns(state.win, state.ns)
+  api.nvim_set_hl(state.ns, "Normal", { link = "ExdarkBg" })
+  api.nvim_set_hl(state.ns, "FLoatBorder", { link = "Exdarkborder" })
+end
+
+M.open_input = function()
   state.input_buf = state.input_buf or api.nvim_create_buf(false, true)
 
   state.input_win = api.nvim_open_win(state.input_buf, true, {
@@ -106,15 +108,7 @@ M.openwins = function()
   vim.fn.prompt_setprompt(state.input_buf, " 󰄉  Enter time: ")
   vim.wo[state.input_win].winhl = "Normal:ExBlack2Bg,FloatBorder:ExBlack2Border"
 
-  api.nvim_win_set_hl_ns(state.win, state.ns)
-  api.nvim_set_hl(state.ns, "Normal", { link = "ExdarkBg" })
-  api.nvim_set_hl(state.ns, "FLoatBorder", { link = "Exdarkborder" })
-
   vim.cmd.startinsert()
-
-  vim.schedule(function()
-    api.nvim_set_current_win(state.win)
-  end)
 end
 
 return M

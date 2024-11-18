@@ -7,7 +7,7 @@ local M = {
   progress = 0,
   mode = "focus",
   minutes = 10,
-  h = 14,
+  h = 8,
 
   config = {
     minutes = { 25, 5 },

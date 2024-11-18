@@ -65,7 +65,7 @@ M.start = function(minutes)
       end
 
       redraw(state.buf, "clock")
-      redraw(state.buf, "progress")
+      -- redraw(state.buf, "progress")
 
       state.total_secs = total_secs
     end)
@@ -75,13 +75,14 @@ end
 M.openwins = function()
   local centered_col = math.floor((vim.o.columns / 2) - (state.w / 2))
   local centered_row = math.floor((vim.o.lines / 2) - (state.h / 2))
+  local right_col = math.floor((vim.o.columns) - (state.w / 2))
 
   state.buf = state.buf or api.nvim_create_buf(false, true)
 
   state.win = api.nvim_open_win(state.buf, true, {
     relative = "editor",
-    row = centered_row,
-    col = centered_col,
+    row = 0, -- centered_row,
+    col = right_col,
     width = state.w,
     height = state.h,
     style = "minimal",

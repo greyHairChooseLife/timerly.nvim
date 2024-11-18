@@ -33,7 +33,7 @@ end
 
 return {
 
-  line("line1", "up"),
+  -- line("line1", "up"),
 
   {
     lines = ui.modes,
@@ -41,7 +41,7 @@ return {
     col_start=2
   },
 
-  line "line2",
+  -- line "line2",
 
   ypad(1),
 
@@ -50,16 +50,16 @@ return {
     name = "clock",
   },
 
-  ypad(2),
+  -- ypad(2),
 
-  {
-    lines = ui.progress,
-    name = "progress",
-  },
-  ypad(1),
-
-  {
-    lines = ui.actionbtns,
-    name = "actionbtns",
-  },
+  -- {
+  --   lines = ui.progress,
+  --   name = "progress",
+  -- },
+  -- ypad(1),
+  --
+  -- {
+  --   lines = ui.actionbtns,
+  --   name = "actionbtns",
+  -- },
 }

@@ -27,7 +27,7 @@ M.modes = function()
   }
 
   return {
-    { { "│ ", "comment" }, { "󰀘  Modes     " }, focus_m, break_m, { " │", "comment" } },
+    { { "  ", "comment" }, { "             " }, focus_m, break_m, { "  ", "comment" } },
   }
 end
 

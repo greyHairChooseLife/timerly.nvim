@@ -31,11 +31,11 @@ local M = {
     end,
     mapping = function() -- is func
       local map = vim.keymap.set
-      local opts = { noremap = true, silent = true, buffer = true }
       local utils = require "timerly.utils"
       local state = require "timerly.state"
       local api = vim.api
       local timerlyapi = require "timerly.api"
+      local opts = { noremap = true, silent = true, buffer = state.buf }
 
       map("n", "q", "", opts)
       map("n", "<Esc>", function()
